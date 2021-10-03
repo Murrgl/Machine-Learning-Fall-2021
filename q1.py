@@ -33,7 +33,7 @@ class GraphCreation(object):
         hylaClass = data[data[:, 2] == 'HylaMinuta']
         hypsiboasClass = data[data[:, 2] == 'HypsiboasCinerascens']
         return featureMFCC10, featureMFCC17, hylaClass, hypsiboasClass
-
+#   Draws the 2 scatter plots.
     def drawScatterPlots(self, file_name, name):
         f1, f2, class1, class2 = self.fileManipulation(file_name)
 
@@ -68,6 +68,7 @@ class GraphCreation(object):
         plt.legend(loc='upper right')
         plt.show()
 
+    #  Here I am drawing 2 line graphs for each class [Hyla and Hypsi] (1 per feature) for each frog in each file.
     def drawLineGraphs(self, file_name, name):
         f1, f2, class1, class2 = self.fileManipulation(file_name)
 
@@ -91,6 +92,7 @@ class GraphCreation(object):
         plt.legend(loc='upper right')
         plt.show()
 
+    #  Here I am drawing 1 box plot.
     def drawBoxPlot(self, file_name, name):
         f1, f2, class1, class2 = self.fileManipulation(file_name)
 
@@ -108,6 +110,7 @@ class GraphCreation(object):
         plt.ylabel('Values')
         plt.show()
 
+    #  Here I am drawing 1 box plot.
     def drawErrorBar(self, file_name, name):
         f1, f2, class1, class2 = self.fileManipulation(file_name)
 
@@ -120,6 +123,8 @@ class GraphCreation(object):
                 ecolor='black', capsize=10)
         plt.tight_layout()
         plt.title('Bar Graph With Error Bars for' + name)
+        plt.xlabel('Features')
+        plt.ylabel('Values')
         plt.show()
 
     def calculateStatistics(self, file_name, name):
@@ -174,5 +179,5 @@ class GraphCreation(object):
 
 
 if __name__ == '__main__':
-    graph = GraphCreation()
-    graph.makeGraphs()
+    localGraph = GraphCreation()
+    localGraph.makeGraphs()
