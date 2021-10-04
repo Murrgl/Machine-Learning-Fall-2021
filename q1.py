@@ -38,9 +38,9 @@ class GraphCreation(object):
         featureMFCC10, featureMFCC17, hylaClass, hypsiboasClass = self.fileManipulation(file_name)
 
         plt.scatter(hylaClass[:,0], hylaClass[:,1], c='magenta',
-                    label="HylaMinuta")
+                    label="Hyla minuta")
         plt.scatter(hypsiboasClass[:,0], hypsiboasClass[:,1], c='orange',
-                    label="HypsiboasCinerascens")
+                    label="Hypsiboas cinerascens")
         plt.title('Scatter plot for both classes in ' + name)
         plt.legend(loc='upper right')
         plt.xlabel(featureMFCC10 + ' values')
