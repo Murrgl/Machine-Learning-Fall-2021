@@ -1,5 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage{fullpage,enumitem,amsmath,amssymb,graphicx}
+\usepackage[T1]{fontenc}
 
 \begin{document}
 \hrulefill
@@ -14,16 +15,126 @@ Name: & Michael Walia \\
 \end{tabular}
 \end{center}
 \hrulefill
-\section*{Problem 1}
+\section*{Chapter 1}
 
-\begin{enumerate}[label=(\alph*)]
-  \item (your solution)
-  \item (your solution)
+\begin{enumerate}
+  \item What is representation learning? Give an example of it – where would it be
+applied? What are the factors of variation?
+\begin{description}
+ \item[Answer:]Representation learning is learning how to represent input data by either transforming the data [encoding] or extracting features from the original data. The reason why we do representation learning is so we can more easily perform a task like classification or prediction.\\\\
+An example of where representation learning would be applied is separating two categories of data by drawing a line in between the dots in a scatterplot. I am referencing Figure 1.1 for this. That is, if the blue dots are all clustered together with the green triangles all around them, there is no way to separate the two clusters when using Cartesian coordinates. However, when we use polar coordinates, we can easily separate the two clusters using a vertical line.\\\\
+Factors of variation are concepts or abstractions that help make sense of the variability in the data. In other words, it is something that can be discerned consistently across the dataset, such as the pose or color of objects. When examining a car, factors of variation might include where the car is, what color the car is, and where the sun is located.
+\end{description}
+
+
+
+
+
+  \item Explain the relationship between an artificial neural network’s architecture,
+e.g., number of layers, number of nodes etc., to its complexity.
+\begin{description}
+ \item[Answer:]As an artificial neural network has a greater number of layers or greater number of nodes, the complexity of that artificial neural network increases. Other factors which increase the complexity of an ANN include more hidden units or more number of connections per neuron.
+\end{description}
 \end{enumerate}
 
-\section*{Problem 2}
+\section*{Chapter 2}
 
-\begin{enumerate}[label=(\alph*)]
+\begin{enumerate}
+  \item What is Eigenvalue Decomposition? Explain/define (in words) what is: 1) a
+positive definite matrix, 2) a positive semi-definite matrix, 3) a negative definite matrix, and
+4) a negative semi-definite matrix
+\begin{description}
+ \item[Answer:] An Eigenvalue Decomposition is decomposing a matrix into its constituent eigenvectors and eigenvalues. An eigenvector of a square matrix X has the property of being multiplied by a vector V where X*V only alters the scale of V. An eigenvalue is a scalar that corresponds to the eigenvector.\\
+
+A positive definite matrix is composed of all positive eigenvalues.\\
+A positive semi-definite matrix is composed of all positive or zero-value eigenvalues.\\
+A negative definite matrix is composed of all negative eigenvalues.\\
+A negative semidefinite matrix is composed of all negative or zero-value eigenvalues.
+\end{description}
+
+ \item Give 2 applications where we would use Singular Value Decomposition (SVD).
+\begin{description}
+ \item[Answer:] You may use SVD when the matrix is not square.\\
+You may use SVD when the eigendecomposition is not defined.
+\end{description}
+\end{enumerate}
+
+\section*{Chapter 3}
+
+\begin{enumerate}
+  \item What is the difference between absolute independence and conditional inde-
+pendence? Explain in words (referring to the equations in the book): what is expected value,
+variance, and covariance?
+\begin{description}
+ \item[Answer:]The difference between absolute independence and conditional independence:
+Absolute independence is if two random variables x are y when their probability distribution can be expressed as a product of two factors - one involving only x and one involving only y.\\
+
+Conditional independence is when you consider two random variables x and y, the variable z provides a conditional probability distribution over x and y where this is factorized for every value of z.\\
+
+Expected value - of some function f(x) with regards to a probability P(x). Here P(x) is the mean value that f is when x is taken from P. For discrete variables it can be computed with a summation and for continuous variables it can be computed with an integral.\\
+
+Variance - gives a measure of how much values of a particular function of a variable x change as different samples of x are taken from its probability distribution. When variance is low, the values of f(x) are close to their expected value. \\
+
+Covariance - this provides an idea of how the two values are correlated with each other and the scale of the variables. When absolute values are high, this means the values change very much and that both are far from their respective means.\\
+
+\end{description}
+  \item Briefly explain the different kinds of statistical distributions (make sure to
+mention/refer to at least 4 different specific types of named distributional models). What is a mixture model and why might it prove useful in modeling some types of data?
+
+ \item[Answer:]
+Bernoulli Distribution
+Definition - a distribution that is over a single binary random variable - controlled by a single parameter that gives the probability of the random variable equal to 1\\\\
+Multinoulli Distribution
+Definition - a distribution over a single discrete variable with k different states where k is finite. \\\\
+Gaussian Distribution
+Definition is a bell-shaped curve where values follow a normal distribution with the same number of measurements above and below the mean value.\\\\
+Exponential Distribution
+Definition - To create a probability distribution with a sharp point at x=0 we can use an exponential distribution. \\\\
+ Laplace Distribution
+Definition - To place a sharp peak of probability mass at an arbitrary point is a Laplace Distribution.\\\\
+The Dirac Distribution
+Definition - To specify all the mass in a probability distribution with clusters around a single point is a Dirac delta function. The Dirac function is defined to be 0-valued everywhere at except 0 and integrates to 1.\\\\
+ Empirical Distribution
+Definition - A use of Dirac delta distribution is also part of empirical distribution.
+\\\\
+A mixture model is a way to combine probability distributions to make a richer distribution.This model helps to identify the latent variable. A latent variable is a variable you cannot observe directly. A powerful type of mixture model is the Gaussian mixture model which helps to illustrate the distribution better. Thus, mixture models help to illustrate latent variables (which would be otherwise hidden) and provide a better illustration of the data.
+
+\item Suppose that we have three coloured boxes: r (red), b (blue), and g (green).
+Box r contains 3 apples, 4 oranges, and 3 limes, box b contains 1 apple, 1 orange, and 0
+limes, and box g contains 3 apples, 3 oranges, and 4 limes. If a box is chosen at random
+with probabilities p(r) = 0.2, p(b) = 0.2, and p(g) = 0.6, and a piece of fruit is removed
+from the box (with equal probability of selecting any of the items in the box), then what
+is the probability of selecting an apple? If we observe that the selected fruit is in fact an
+orange, what is the probability that it came from the green box?
+
+\begin{description}
+ \item[Answer:] 
+Probability of Selecting an Apple: 0.34\\\\
+Work for Selecting Apple Using Bayes' Theorem:\\
+p(apple)= p(apple|red box)p(red box) + p(apple|blue box)p(blue box)+p(apple|green box)p(green box)\\
+p(apple)= (0.3 * 0.2) + (0.5*0.2) + (0.3*0.6)\\
+p(apple) = 0.34 \\
+
+Probability the Orange Came From a Green Box: 0.5\\\
+
+Work for Selecting Orange From a Green Box Using Bayes' Theorem:\\
+p(orange)= p(orange|red box)p(red box) + p(orange|blue box)p(blue box)+p(orange|green box)p(green box)\\
+p(orange)= (0.4*0.2) + (0.5*0.2) + (0.3*0.6)\\
+p(orange) = 0.36\\
+
+p(green box|orange) =
+
+
+
+
+\end{description}
+
+
+\end{enumerate}
+
+\section*{Chapter 5}
+
+\begin{enumerate}
   \item (your solution)
   \item (your solution)
 \end{enumerate}
