@@ -10,8 +10,17 @@ import os
 
 # This numerical gradient algorithm calculates an approximation of nabla.
 # It follows the 8 steps listed on page 3 of the homework.
-def numericalGradientAlgorithm(inputData, outputData, theta, regularizationNum):
-    epsilonNum = 0.0001 # The HW suggests a value of 0.001 or 0.0001.
+
+# The following notation is used in this assignment (the below quote is directly from the homework)
+# "Our parameters are housed in the construct Θ = {W, b} (where W is a
+# weight matrix of dimensions (d × k) and b is a bias vector of dimensions (1 × k), where d is the
+# number of observed variables and k is the number of classes we want to predict). Our dataset is X
+# which is of dimension (N × d) (N is the number of samples) and y (which is a column vector of noting that we have written a regularized loss (imposing a Gaussian prior distribution over the
+# input-to-hidden parameters W). The computation of p is simply the application of the softmax link
+# function presented to you in class, where f = W · X + b is the computation of the logits (or log
+# odds/class scores)."
+def numericalGradientAlgorithm(dataSetX, columnVectorY, theta, regularizationNum):
+    epsilonNum = 0.0001 # The HW suggests a value of 0.001 or 0.0001. I found no difference using either.
     nablaArray = []
     for index in range(len(theta)):
         parameter = theta[index]
@@ -25,13 +34,13 @@ def numericalGradientAlgorithm(inputData, outputData, theta, regularizationNum):
             # 1. Add ϵ to Θj, put Θj back into Θ, giving us (Θ + ϵ) at j
             thetaPlusEpsilon[index][indexMulti] = parameter[indexMulti] + epsilonNum
             # 2. Given perturbed Θj (all the rest of the values in Θ are fixed), calculate J (Θ + ϵ)
-            perturbedThetaPlusEpsilon = calculateCost(inputData, outputData, thetaPlusEpsilon, regularizationNum)
+            perturbedThetaPlusEpsilon = calculateCost(dataSetX, columnVectorY, thetaPlusEpsilon, regularizationNum)
             # 3. Resetting theta to its original state.
             theta[index][indexMulti] = parameter[indexMulti] - epsilonNum
             # 4. Subtract ϵ from Θj
             thetaMinusEpsilon[index][indexMulti] = parameter[indexMulti] - epsilonNum
             # 5. Given perturbed Θj, calculate J (Θ − ϵ)
-            perturbedThetaMinusEpsilon = calculateCost(inputData, outputData, thetaMinusEpsilon, regularizationNum)
+            perturbedThetaMinusEpsilon = calculateCost(dataSetX, columnVectorY, thetaMinusEpsilon, regularizationNum)
             # 6. Estimate the scalar derivative using Equation 5
             # 7. Reset b to its original state, returning ∼ ∇Θ
             theta[index][indexMulti] = parameter[indexMulti] + epsilonNum
@@ -42,44 +51,45 @@ def numericalGradientAlgorithm(inputData, outputData, theta, regularizationNum):
     return tuple(nablaArray)
 
 # This function calculates the softmax loss.
-def calculateLossSoftMax(inputData, outputData):
-    # Forward pass
-    N = inputData.shape[0]
-    exp_vals = np.exp(inputData)
-    probs = exp_vals / np.sum(exp_vals, axis=1, keepdims=True)
-    loss = -np.mean(np.log(probs[range(N), outputData]))
-    # Backward pass
-    dX = np.array(probs, copy=True)
-    dX[range(N), outputData] -= 1
-    dX /= N
-    return loss, probs, dX
+# I wasn't sure how to calculate softmax from scratch so I used this site as a
+# reference: https://www.cristiandima.com/neural-networks-from-scratch-in-python/
+def calculateLossSoftMax(dataSetX, columnVectorY):
+    # This is the forward pass.
+    numbersShaped = dataSetX.shape[0]
+    exponentionalValues = np.exp(dataSetX)
+    probability = exponentionalValues / np.sum(exponentionalValues, axis=1, keepdims=True)
+    lossCalculation = -np.mean(np.log(probability[range(numbersShaped), columnVectorY]))
+    # This is the backward pass.
+    derivativeX = np.array(probability, copy=True)
+    derivativeX[range(numbersShaped), columnVectorY] -= 1
+    derivativeX /= numbersShaped
+    return lossCalculation, probability, derivativeX
 
 # This function computes the gradient descent.
-def calculateGradient(inputData, outputData, theta, regularizationNum):  # returns nabla
-    W, b = theta[0], theta[1]
-    f = inputData.dot(W) + b
-    _, _, df = calculateLossSoftMax(f, outputData)
-    dW = np.dot(inputData.T, df) + regularizationNum * W
-    db = np.sum(df, axis=0)
-    return (dW, db)
+def calculateGradientDescent(dataSetX, columnVectorY, theta, regularizationNum):
+    weightMatrix, biasVector = theta[0], theta[1]
+    f = dataSetX.dot(weightMatrix) + biasVector
+    _, _, df = calculateLossSoftMax(f, columnVectorY)
+    derivativeWeightMatrix = np.dot(dataSetX.T, df) + regularizationNum * weightMatrix
+    derivativeBiasVector = np.sum(df, axis=0)
+    return (derivativeWeightMatrix, derivativeBiasVector)
 
 # This function is the cost function.
-def calculateCost(inputData, outputData, theta, regularizationNum):
-    W, b = theta[0], theta[1]
-    N = inputData.shape[0]
-    f = inputData.dot(W) + b
-    data_loss, _, _ = calculateLossSoftMax(f, outputData)
-    reg_loss = 0.5 * regularizationNum * np.sum(W ** 2)
-    cost = data_loss + reg_loss
-    return cost
+def calculateCost(dataSetX, columnVectorY, theta, regularizationNum):
+    weightMatrix, biasVector = theta[0], theta[1]
+    f = dataSetX.dot(weightMatrix) + biasVector
+    dataLoss, _, _ = calculateLossSoftMax(f, columnVectorY)
+    regularizationLoss = 0.5 * regularizationNum * np.sum(weightMatrix ** 2)
+    calculatedCost = dataLoss + regularizationLoss
+    return calculatedCost
 
-# This returns the classification for XOR.
-def classifyXOR(inputData, theta):
-    W, b = theta[0], theta[1]
-    # evaluate class scores
-    scores = inputData.dot(W) + b
-    _, probs, _ = calculateLossSoftMax(scores, y)
-    return scores, probs
+# This returns the classification for XOR - 1 or 0.
+def classifyXOR(dataSetX, theta):
+    weightMatrix, biasVector = theta[0], theta[1]
+    XORclass = dataSetX.dot(weightMatrix) + biasVector
+    _, probability, _ = calculateLossSoftMax(XORclass, y)
+    return XORclass, probability
+
 
 
 # Note this requires your XOR.dat to be in the same directory as the q1.py or this won't run.
@@ -111,7 +121,7 @@ theta = (W, b)
 # Hyperparameters used
 regularization = 1e-3  # regularization strength
 nablaList = numericalGradientAlgorithm(X, y, theta, regularization)
-nabla = calculateGradient(X, y, theta, regularization)
+nabla = calculateGradientDescent(X, y, theta, regularization)
 nablaList = list(nablaList)
 nabla = list(nabla)
 
@@ -145,7 +155,7 @@ for i in range(numberOfEpochs):
         print("Iteration [%d] - Loss [%f]" % (i, loss))
 
     # Here I update the parameter.
-    dW, db = calculateGradient(X, y, theta, regularization)
+    dW, db = calculateGradientDescent(X, y, theta, regularization)
     W = W - stepSize * dW
     b = b - stepSize * db
 
